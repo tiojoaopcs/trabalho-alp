@@ -32,20 +32,18 @@ int comecaCom(char *str, char *proc){
 
 void ordena(ATOM **lista){
     ATOM *aux = *lista;
-    
 }
 
-int main(int argc, char *argv[]){
-
-    // Primeiro vou testar com scanf mesmo, depois coloca esses troço de arquivo
+int main(int argc, char **argv){
     char linhas[100][len];
     int lidas=0;
     char candidato[len];    
     FILE *arq = fopen(argv[1], "r+"), *saida = fopen(argv[2], "w+");
     
     while(fgets(candidato, len, arq)){
+        printf("while rodando\n");
         if(comecaCom(candidato,"ATOM")){
-            strcpy(linhas[lidas],candidato);
+            strcpy(linhas[lidas],candidato+4);
             lidas++;
         }                        
     }
@@ -56,7 +54,7 @@ int main(int argc, char *argv[]){
 
     for(i=0; i<lidas; i++){
         ATOM *new=malloc(sizeof(ATOM));
-        sscanf(linhas[i],"%d %s %s %*c %d %lf %lf %lf", new->id,new->nome,new->amino,new->tipo,new->x,new->y,new->z);
+        sscanf(linhas[i]," %d %s %s %*c %d %lf %lf %lf", new->id,new->nome,new->amino,new->tipo,new->x,new->y,new->z);
         new->prox=inic;
         inic=new;
     }    
