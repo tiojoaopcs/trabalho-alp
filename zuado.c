@@ -1,6 +1,6 @@
 /*Nome: Pedro Augusto Gandra de Andrade
  *Matricula: 201811130208
- *Nome: Pedro Henrique Madeira de Oliveira Pereira  
+ *Nome: Pedro Henrique Madeira de Oliveira Pereira
  *Matricula: 201811130224
  *Nome: Vítor Fitzherbert Souza
  *Matricula: 201811130267
@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
 #define len 201
 
 int i;
@@ -26,10 +27,10 @@ typedef struct a{
 int comecaCom(char *str, char *proc){
     for(i=0; proc[i]!='\0'; i++){
         if(str[i]!=proc[i]){
-            return 0;            
+            return 0;
         }
     }
-    return 1;            
+    return 1;
 }
 
 int comparar(ATOM *s1,ATOM *s2){
@@ -97,14 +98,14 @@ ATOM *querySelector(ATOM *inic,void *val,seletor cmp){
 int main(int argc, char **argv){
     char linhas[100][len];
     int lidas=0;
-    char candidato[len];    
+    char candidato[len];
     // FILE *arq = fopen(argv[1], "r+"), *saida = fopen(argv[2], "w+");
-    
-    while(/* fgets(candidato, len, arq) */gets(candidato)){
+
+    while(/* fgets(candidato, len, arq) */ gets(candidato) && strcmp(candidato,"0")!=0){
         if(comecaCom(candidato,"ATOM")){
             strcpy(linhas[lidas],candidato+4);
             lidas++;
-        }                   
+        }
     }
 
     printf("Linhas lidas: %d\n",lidas);
@@ -117,20 +118,104 @@ int main(int argc, char **argv){
         new->prox=inic;
         inic=new;
     }
-    
-    
+
+
     ordena(&inic);
-    
-    ATOM *iter;
+
+    //Menu
+    printf("\n=======================================\n");
+    printf("Digite uma opção dentre as seguintes:\n");
+    printf("\"listar (nome/numero)\" - Listar átomos. O nome ou número do átomo são opcionais.\n");
+    printf("\"gerar\" - Gerar arquivo de saída.\n");
+    printf("\"quantidade (tipo/amino)\" - Mostra a quantidade de átomos de cada tipo ou a quantidade de aminoácidos de cada tipo.\n");
+    printf("\"total\" - Exibe a quantidade total de aminoácidos no arquivo.\n");
+    printf("\"encerrar\" - Encerra\n");
+    printf("=======================================\n\n");
+
+    char m[2][len];
+    while("17xXMeuPartidoÉOBrasilXx17"){
+        strcpy(m[0],"");
+        strcpy(m[1],"");
+        char sep;
+        int l=0;
+
+        while(17){
+            scanf("%s%c",m[l],&sep);
+            if(sep=='\n'){
+                break;
+            }
+            else{
+                l++;
+            }
+        }
+
+        if(strcmp(m[0], "listar")==0){
+            if(l==0){
+                ATOM *iter;
+                for(iter=inic; iter!=NULL; iter=iter->prox){
+                    printf("Nome: %-6sAmino: %-6sTipo: %-6d\n",iter->nome,iter->amino,iter->tipo);
+                }
+            }
+            else{
+                if(isdigit(m[1][0])){
+                    int num=atoi(m[1]);
+                    ATOM *teste=querySelector(inic,&num,seletorId);
+                    if(teste==NULL){
+                        printf("deu nao fi rsrs\n");//faze funçao pra imprimir
+                    }
+                    else{
+                        printf("deu sim fi rsrs\n");
+                    }
+                }
+                else{
+                    ATOM *teste2=inic;
+                    int deu=0;
+                    while(42){
+                        teste2=querySelector(teste2,m[1],seletorNome);
+                        if(teste2==NULL){
+                            if(!deu) printf("deu nao fi rsrs\n");
+                            break;
+                        }
+                        else{
+                            printf("TESTE2 = Id: %-6dX: %-6.3lf\n",teste2->id,teste2->x);
+                            deu=1;
+                            teste2=teste2->prox;
+                        }
+                    }
+                }
+            }
+        }
+
+        else if(strcmp(m[0], "gerar") == 0){
+            if(l == 0){
+                printf("deu pra gera rsrs\n");
+            }
+            else printf("!deu pra gera rsrs\n");
+        }
+
+        else if(strcmp(m[0], "quantidade") == 0){
+            if(l == 0){
+                printf("hey gringo do you want a kick in the saco asshole rsrs\n");
+            }
+            else{
+                if(strcmp(m[1], "tipo") == 0){
+
+                }
+            }
+        }
+    }
+    //***************************************************
+
+    /*ATOM *iter;
     for(iter=inic; iter!=NULL; iter=iter->prox){
         printf("Nome: %-6sAmino: %-6sTipo: %-6d\n",iter->nome,iter->amino,iter->tipo);
     }
-    
-    int quatro=4;
+
+    int quatro=5;
     ATOM *teste=querySelector(inic,&quatro,seletorId);
     printf("TESTE = Id: %-6dX: %-6.3lf\n",teste->id,teste->x);
-    
-    char *carbono="C";
+
+    char *carbono="CA";
     ATOM *teste2=inic;
     while(42){
         teste2=querySelector(teste2,carbono,seletorNome);
@@ -141,8 +226,8 @@ int main(int argc, char **argv){
             printf("TESTE2 = Id: %-6dX: %-6.3lf\n",teste2->id,teste2->x);
             teste2=teste2->prox;
         }
-    }
-    
+    }*/
+
     /* fclose(arq);
     fclose(saida); */
     return 0;
