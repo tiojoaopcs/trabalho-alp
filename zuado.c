@@ -85,6 +85,9 @@ int seletorId(ATOM *a,void *v){
 int seletorNome(ATOM *a,void *v){
     return strcmp(a->nome,(char *)v)==0;
 }
+int seletorAmino(ATOM *a,void *v){
+    return strcmp(a->amino,(char *)v)==0;
+}
 
 ATOM *querySelector(ATOM *inic,void *val,seletor cmp){
     while(69){
@@ -96,9 +99,12 @@ ATOM *querySelector(ATOM *inic,void *val,seletor cmp){
 }
 
 //FUNÇÃO PARA IMPRIMIR
+void print1(ATOM *a){
+    printf("Nome: %-6sAminoacido: %-6sTipo: %-6dID: %-6d\n", a->nome, a->amino, a->tipo, a->id);
+}
 void impressora(ATOM *lista){
-    for(lista; lista!=NULL; lista=lista->prox){
-        printf("Nome: %-6sAminoacido: %-6sTipo: %-6dID: %-6d\n", lista->nome, lista->amino, lista->tipo, lista->id);
+    for(; lista!=NULL; lista=lista->prox){
+        print1(lista);
     }
 }
 
@@ -127,6 +133,7 @@ int main(int argc, char **argv){
     }
 
 
+    // Aqui ordena por Select Sort
     ordena(&inic);
 
     //Menu
@@ -141,9 +148,7 @@ int main(int argc, char **argv){
 
     char m[2][len];
 
-    int contador; //será utilizado quando a "quantidade" for solicitada
-
-    while("1"){
+    while(";-;"){
         strcpy(m[0],"");
         strcpy(m[1],"");
         char sep;
@@ -171,10 +176,10 @@ int main(int argc, char **argv){
                     int num=atoi(m[1]);
                     ATOM *teste=querySelector(inic,&num,seletorId);
                     if(teste==NULL){
-                        printf("Nao foi possivel encontrar o ID %s\n", m[1]);//faze funçao pra imprimir
+                        printf("Nao foi possivel encontrar o ID %s\n", m[1]);
                     }
                     else{
-                        printf("Nome: %-6sAminoacido: %-6sTipo: %-6dID: %-6d\n", teste->nome, teste->amino, teste->tipo, teste->id);
+                        print1(teste);
                     }
                 }
                 else{
@@ -187,7 +192,7 @@ int main(int argc, char **argv){
                             break;
                         }
                         else{
-                            printf("Nome: %-6sAminoacido: %-6sTipo: %-6dID: %-6d\n", teste2->nome, teste2->amino, teste2->tipo, teste2->id);
+                            print1(teste2);
                             deu=1;
                             teste2=teste2->prox;
                         }
@@ -204,57 +209,96 @@ int main(int argc, char **argv){
         }
 
         else if(strcmp(m[0], "quantidade") == 0){
-            if(l <= 1){
+            if(l < 1){
                 printf("Poucos argumentos para listar a quantidade. Digite \"quantidade + nome + [nome]\" ou \"quantidade + amino + [aminoacido]\"\n");
             }
+
             else{
-                if(strcmp(m[1], "nome") == 0){
-                    contador = 0;
-                    printf("teste inic = %p\n", inic);
-                    ATOM *qtd = querySelector(inic, m[2], seletorNome);
-                    printf("teste\n");
-                    if(qtd == NULL) printf("Nao foi possivel encontrar \"%s\"\n", m[2]);
-                    else{
-                        impressora(qtd);
-                        printf("teste\n");
-                        while(qtd){
-                            qtd=qtd->prox;
-                            contador++;
-                            printf("contador = %d\n", contador);
+                int ok;
+                if(strcmp(m[1],"nome")==0){
+                    ok=1;
+                }
+                else if(strcmp(m[1],"amino")==0){
+                    ok=2;
+                }
+                else{
+                    ok=0;
+                    printf("po colabora man\n");
+                }
+
+                if(ok){
+                    if(l==1){
+                        int size=0;
+                        char dados[100][6];
+                        int qtds[100];
+                        ATOM *li=inic;
+                        
+                        do{
+                            int eNovo=1;
+                            for(i=0; i<size; i++){
+                                char const *str=ok==1? li->nome: li->amino;
+                                if(strcmp(dados[i],str)==0){
+                                    qtds[i]++;
+                                    eNovo=0;
+                                    break;
+                                }
+                            }
+
+                            if(eNovo){
+                                qtds[size]=1;
+                                strcpy(dados[size],ok==1? li->nome: li->amino);
+                                size++;
+                            }
+
+                            li=li->prox;
+                        }while(li!=NULL);
+
+                        char const *str2=ok==1? "nome": "aminoacido";
+                        for(i=0; i<size; i++){
+                            printf("Ha %d atomo%s com o %s %s\n",
+                                qtds[i],
+                                qtds[i]>1? "s": "",
+                                str2,
+                                dados[i]);
                         }
-                        printf("Ha %d atomos com o nome %s\n", contador, m[2]);
+                    }
+
+                    else{
+                        seletor func=ok==1? seletorNome: seletorAmino;
+                        ATOM *qtd = querySelector(inic, m[2], func);
+                        if(qtd == NULL) printf("Nao foi possivel encontrar \"%s\"\n", m[2]);
+                        else{
+                            int contador=1;
+                            while(666){
+                                qtd=querySelector(qtd->prox,m[2],func);
+                                if(qtd!=NULL) contador++;
+                                else break;
+                            }
+                            printf("Ha %d atomo%s com o %s %s\n",
+                                contador,
+                                contador>1? "s": "",
+                                ok==1? "nome": "aminoacido",
+                                m[2]);
+                        }
                     }
                 }
             }
         }
-        else if(strcmp(m[0], "encerrar") == 0){
-            return;
+
+        else if(strcmp(m[0], "total") == 0){
+            
         }
+
+        else if(strcmp(m[0], "encerrar") == 0){
+            return 0;
+        }
+
+        else{
+            printf("comando invalido presta atencao mano\n");
+        }
+
         printf("\n");
     }
-    //***************************************************
-
-    /*ATOM *iter;
-    for(iter=inic; iter!=NULL; iter=iter->prox){
-        printf("Nome: %-6sAmino: %-6sTipo: %-6d\n",iter->nome,iter->amino,iter->tipo);
-    }
-
-    int quatro=5;
-    ATOM *teste=querySelector(inic,&quatro,seletorId);
-    printf("TESTE = Id: %-6dX: %-6.3lf\n",teste->id,teste->x);
-
-    char *carbono="CA";
-    ATOM *teste2=inic;
-    while(42){
-        teste2=querySelector(teste2,carbono,seletorNome);
-        if(teste2==NULL){
-            break;
-        }
-        else{
-            printf("TESTE2 = Id: %-6dX: %-6.3lf\n",teste2->id,teste2->x);
-            teste2=teste2->prox;
-        }
-    }*/
 
     /* fclose(arq);
     fclose(saida); */
@@ -263,10 +307,6 @@ int main(int argc, char **argv){
 
 /*
 ENTRADA
-
-SCALE1      0.066667  0.000000  0.028849        0.00000
-SCALE2      0.000000  0.050505  0.000000        0.00000
-SCALE3      0.000000  0.000000  0.066037        0.00000
 ATOM      1  N   GLY A   1      -4.788  -8.935   3.453  1.00 11.53           N
 ATOM      2  CA  GLY A   1      -4.218 -10.294   3.312  1.00  9.54           C
 ATOM      3  C   GLY A   1      -3.815 -10.534   1.870  1.00  8.53           C
