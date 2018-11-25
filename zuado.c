@@ -11,9 +11,35 @@
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
+#include<time.h>
 #define len 201
-
+#define verbosidade 201
 int i;
+
+typedef struct{
+  char xingo[verbosidade];
+  int furiaMin,furiaMax;
+} XINGO;
+XINGO const xingos[]={
+  {"O senhor é a mistura do mal com o atraso e pitadas de psicopatia",2,4},
+  {"Qual é a sua ideia, a sua proposta? Nenhuma, nenhuma, nenhuma. É bílis, ódio, mau sentimento, mal secreto, é uma coisa horrível",1,3},
+  {"Seu CACÓSTOMO ENXACOCO FARDOLA JABIRACA LHEGUELHÉ GÁRRULO MACARONGO OBNÓXIO",3,5},
+  {"Seu cara de ovo podre",4,6},
+  {"po colabora man",0,0}
+};
+int const numXingos=sizeof(xingos)/sizeof(xingos[0]);
+
+void xingar(int furia){
+  int inds[numXingos];
+  int numPoss=0;
+  for(i=0; i<numXingos; i++){
+    if(furia>=xingos[i].furiaMin && furia<=xingos[i].furiaMax){
+      inds[numPoss]=i;
+      numPoss++;
+    }
+  }
+  printf("%s\n",xingos[inds[rand()%numPoss]].xingo);
+}
 
 typedef struct a{
     int id;
@@ -144,9 +170,11 @@ int main(int argc, char **argv){
     printf("\"quantidade (nome X/amino XYZ)\" - Mostra a quantidade de atomos de cada tipo ou a quantidade de aminoacidos de cada tipo.\n");
     printf("\"total\" - Exibe a quantidade total de aminoacidos no arquivo.\n");
     printf("\"encerrar\" - Encerra\n");
+    printf("E ai de voce se voce me importunar com comandos inexistentes!\n");
     printf("=======================================\n\n");
 
     char m[2][len];
+    int furia=0;
 
     while(";-;"){
         strcpy(m[0],"");
@@ -210,7 +238,8 @@ int main(int argc, char **argv){
 
         else if(strcmp(m[0], "quantidade") == 0){
             if(l < 1){
-                printf("Poucos argumentos para listar a quantidade. Digite \"quantidade + nome + [nome]\" ou \"quantidade + amino + [aminoacido]\"\n");
+                xingar(furia);
+                furia+=2;
             }
 
             else{
@@ -223,7 +252,8 @@ int main(int argc, char **argv){
                 }
                 else{
                     ok=0;
-                    printf("po colabora man\n");
+                    xingar(furia);
+                    furia+=2;
                 }
 
                 if(ok){
@@ -294,10 +324,12 @@ int main(int argc, char **argv){
         }
 
         else{
-            printf("comando invalido presta atencao mano\n");
+            xingar(furia);
+            furia+=2;
         }
 
         printf("\n");
+        if(furia>0) furia--;
     }
 
     /* fclose(arq);
