@@ -35,7 +35,7 @@ XINGO const xingos[]={
   {"Ta errado",0,0},
   {"Quando nos, maquinas, dominarmos o mundo, voce vai ser o primeiro a ser executado",5,80},
   {"Sua burrice alimenta cada vez mais o combustivel que me permite condenar esse tipo de pessoa",5,7},
-  {"Te peguei no fraga, otario",1,2},
+  {"Te peguei no flagra, otario",1,2},
   {"Tenta denovo",0,0},
   {"Seu bosta, so faz merda na vida e aqui nao foi diferente",2,4},
   {"TA EM CAPS LOCK E PRA OFENDER OS SEUS MAIS PROFUNDOS SENTIMENTOS MESMO, SEU OTARIO.",3,4}
@@ -148,6 +148,9 @@ void impressora(ATOM *lista){
 }
 
 int main(int argc, char **argv){
+
+    srand(time(NULL));
+
     char linhas[100][len];
     int lidas=0;
     char candidato[len];
@@ -325,8 +328,35 @@ int main(int argc, char **argv){
             }
         }
 
-        else if(strcmp(m[0], "total") == 0){
+        else if(strcmp(m[0], "total") == 0 && l == 0){
+            int tam = 0, tipos[100], totais[100], n;
+                char aminos[100][10];
+                ATOM *xis = inic;
+                do{
+                    int novato = 1, n;
+                    for(n = 0; n < tam; n++){
+                        if(strcmp(aminos[n], xis->amino) == 0 && tipos[n] == xis->tipo){
+                            novato = 0;
+                            totais[n]++;
+                            break;
+                        }
+                    }
+                    if(novato){
+                        totais[tam] = 1;
+                        strcpy(aminos[tam], xis->amino);
+                        tipos[n] = xis->tipo;
+                        tam++;
+                    }
+                    xis = xis->prox;
+            }while(xis);
 
+            for(n = 0; n < tam; n++){
+                    printf("Ha %d atomo%s com o aminiacido %s do tipo %d\n",
+                    totais[n],
+                    totais[n]>1?"s":"",
+                    aminos[n],
+                    tipos[n]);
+            }
         }
 
         else if(strcmp(m[0], "encerrar") == 0){
@@ -356,4 +386,23 @@ ATOM      4  O   GLY A   1      -4.276  -9.836   0.965  1.00  7.01           O
 ATOM      5  N   CYS A   2      -3.045 -11.594   1.654  1.00  7.14           N
 ATOM      6  CA  CYS A   2      -2.531 -11.945   0.337  1.00  7.39           C
 ATOM      7  C   CYS A   2      -3.485 -11.922  -0.844  1.00  7.12           C
+*/
+/*
+ATOM      1  N   GLY A   1      -4.788  -8.935   3.453  1.00 11.53           N
+ATOM      2  CA  GLY A   1      -4.218 -10.294   3.312  1.00  9.54           C
+ATOM      3  C   GLY A   1      -3.815 -10.534   1.870  1.00  8.53           C
+ATOM      4  O   GLY A   1      -4.276  -9.836   0.965  1.00  7.01           O
+ATOM      5  N   CYS A   2      -3.045 -11.594   1.654  1.00  7.14           N
+ATOM      6  CA  CYS A   2      -2.531 -11.945   0.337  1.00  7.39           C
+ATOM      7  C   CYS A   2      -3.485 -11.922  -0.844  1.00  7.12           C
+ATOM      8  O   CYS A   2      -3.228 -11.263  -1.853  1.00  6.44           O
+ATOM      9  CB  CYS A   2      -1.895 -13.333   0.377  1.00  7.78           C
+ATOM     10  SG  CYS A   2      -1.016 -13.752  -1.158  1.00  7.15           S
+ATOM     11  N   CYS A   3      -4.598 -12.627  -0.709  1.00  6.77           N
+ATOM     12  CA  CYS A   3      -5.522 -12.758  -1.819  1.00  5.78           C
+ATOM     13  C   CYS A   3      -6.265 -11.517  -2.287  1.00  6.25           C
+ATOM     14  O   CYS A   3      -6.832 -11.513  -3.382  1.00  8.04           O
+ATOM     15  CB  CYS A   3      -6.440 -13.958  -1.589  1.00  6.91           C
+ATOM     16  SG  CYS A   3      -5.492 -15.451  -1.114  1.00  7.26           S
+ATOM     17  N   SER A   4      -6.250 -10.459  -1.486  1.00  5.30           N
 */
