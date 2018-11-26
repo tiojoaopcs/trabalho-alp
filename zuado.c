@@ -242,11 +242,17 @@ int main(int argc, char **argv){
             }
         }
 
-        else if(strcmp(m[0], "gerar") == 0){
-            if(l == 0){
-                printf("deu pra gera rsrs\n"); //fprintf
+        else if(strcmp(m[0], "gerar") == 0 && l == 0){
+            FILE *saida = fopen(argv[2], "w+");
+            ATOM *b = inic;
+            if(saida){
+              for(; b; b = b->prox){
+                fprintf(saida, "Nome: %-6sAminoacido: %-6sID: %-6dX: %-10.3lfY: %-10.3lfZ: %-10.3lf\n", b->nome, b->amino, b->id, b->x, b->y, b->z);
+              }
+              printf("Arquivo gerado com sucesso!\n");
             }
-            else printf("Nao foi possivel gerar o arquivo de saida\n");
+            else printf("Nao foi possivel gerar o arquivo de saida");
+            fclose(saida);
         }
 
         else if(strcmp(m[0], "quantidade") == 0){
