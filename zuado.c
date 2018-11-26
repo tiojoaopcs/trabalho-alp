@@ -25,7 +25,20 @@ XINGO const xingos[]={
   {"Qual é a sua ideia, a sua proposta? Nenhuma, nenhuma, nenhuma. É bílis, ódio, mau sentimento, mal secreto, é uma coisa horrível",1,3},
   {"Seu CACÓSTOMO ENXACOCO FARDOLA JABIRACA LHEGUELHÉ GÁRRULO MACARONGO OBNÓXIO",3,5},
   {"Seu cara de ovo podre",4,6},
-  {"po colabora man",0,0}
+  {"po colabora man",0,0},
+   {"Seu cara de ovo podre",4,6},
+  {"Vossa manifestacao sentimentocarnal ao qual me dirijo aparenta pertencer a especie denominada Equus asinus devido ao vosso quociente de intelectualidade previsto.",5,6},
+  {"Se nao seguir corretamente as especificacoes para que o codigo funcione em sua totalidade, serei obrigado a utilizar um xingamento que possa vir a ofender seus sentimentos, meu caro.",3,5},
+  {"Espero imensamente que voce queime no mais fundo penhasco sangrento do inferno, juntamente com as almas penadas dos demais desatentos como voce, seu vagabundo cara de pau",6,8},
+  {"Vagabundo cara de pau, escreva os trem direito pro codigo funcionar ne.",1,4},
+  {"Se nao vir a colaborar a dificuldade desta sessao se encontrara superior em breve, meu irmao.",0,1},
+  {"Ta errado",0,0},
+  {"Quando nos, maquinas, dominarmos o mundo, voce vai ser o primeiro a ser executado",5,80},
+  {"Sua burrice alimenta cada vez mais o combustivel que me permite condenar esse tipo de pessoa",5,7},
+  {"Te peguei no fraga, otario",1,2},
+  {"Tenta denovo",0,0},
+  {"Seu bosta, so faz merda na vida e aqui nao foi diferente",2,4},
+  {"TA EM CAPS LOCK E PRA OFENDER OS SEUS MAIS PROFUNDOS SENTIMENTOS MESMO, SEU OTARIO.",3,4}
 };
 int const numXingos=sizeof(xingos)/sizeof(xingos[0]);
 
@@ -194,10 +207,7 @@ int main(int argc, char **argv){
         printf("\n");
         if(strcmp(m[0], "listar")==0){
             if(l==0){
-                ATOM *aux;
-                aux = inic;
-                ordena(&aux);
-                impressora(aux);
+                impressora(inic);
             }
             else{
                 if(isdigit(m[1][0])){
@@ -231,9 +241,9 @@ int main(int argc, char **argv){
 
         else if(strcmp(m[0], "gerar") == 0){
             if(l == 0){
-                printf("deu pra gera rsrs\n");
+                printf("deu pra gera rsrs\n"); //fprintf
             }
-            else printf("!deu pra gera rsrs\n");
+            else printf("Nao foi possivel gerar o arquivo de saida\n");
         }
 
         else if(strcmp(m[0], "quantidade") == 0){
@@ -262,7 +272,7 @@ int main(int argc, char **argv){
                         char dados[100][6];
                         int qtds[100];
                         ATOM *li=inic;
-                        
+
                         do{
                             int eNovo=1;
                             for(i=0; i<size; i++){
@@ -316,7 +326,7 @@ int main(int argc, char **argv){
         }
 
         else if(strcmp(m[0], "total") == 0){
-            
+
         }
 
         else if(strcmp(m[0], "encerrar") == 0){
