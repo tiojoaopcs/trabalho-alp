@@ -33,12 +33,13 @@ XINGO const xingos[]={
   {"Vagabundo cara de pau, escreva os trem direito pro codigo funcionar ne.",1,4},
   {"Se nao vir a colaborar a dificuldade desta sessao se encontrara superior em breve, meu irmao.",0,1},
   {"Ta errado",0,0},
-  {"Quando nos, maquinas, dominarmos o mundo, voce vai ser o primeiro a ser executado",5,80},
+  {"Quando nos, maquinas, dominarmos o mundo, voce vai ser o primeiro a ser executado",5,8},
   {"Sua burrice alimenta cada vez mais o combustivel que me permite condenar esse tipo de pessoa",5,7},
   {"Te peguei no flagra, otario",1,2},
   {"Tenta denovo",0,0},
   {"Seu bosta, so faz merda na vida e aqui nao foi diferente",2,4},
-  {"TA EM CAPS LOCK E PRA OFENDER OS SEUS MAIS PROFUNDOS SENTIMENTOS MESMO, SEU OTARIO.",3,4}
+  {"TA EM CAPS LOCK E PRA OFENDER OS SEUS MAIS PROFUNDOS SENTIMENTOS MESMO, SEU OTARIO.",3,4},
+  {"Seu Samuel",8,2147483647}
 };
 int const numXingos=sizeof(xingos)/sizeof(xingos[0]);
 
@@ -151,12 +152,12 @@ int main(int argc, char **argv){
 
     srand(time(NULL));
 
-    char linhas[100][len];
+    char linhas[500][len];
     int lidas=0;
     char candidato[len];
     FILE *arq = fopen(argv[1], "r");
 
-    while( fgets(candidato, len, arq) && strcmp(candidato,"0")!=0){
+    while( fgets(candidato, len, arq)){
         if(comecaCom(candidato,"ATOM")){
             strcpy(linhas[lidas],candidato+4);
             lidas++;
@@ -174,7 +175,7 @@ int main(int argc, char **argv){
     }
 
 
-    // Aqui ordena por Select Sort
+    // Aqui ordena por um algoritmo de select sort diferente dos usuais
     ordena(&inic);
 
     //Menu
@@ -188,16 +189,17 @@ int main(int argc, char **argv){
     printf("E ai de voce se voce me importunar com comandos inexistentes!\n");
     printf("=======================================\n\n");
 
-    char m[2][len];
+    char m[3][len];
     int furia=0;
 
     while(";-;"){
         strcpy(m[0],"");
         strcpy(m[1],"");
+        strcpy(m[2],"");
         char sep;
         int l=0;
-
-        while(17){
+		
+        while(13+4){
             scanf("%s%c",m[l],&sep);
             if(sep=='\n'){
                 break;
@@ -245,7 +247,7 @@ int main(int argc, char **argv){
             FILE *saida = fopen(argv[2], "w");
             ATOM *b = inic;
             if(saida){
-              for(; b; b = b->prox){
+              for(; b!=NULL; b = b->prox){
                 fprintf(saida, "Nome: %-6sAminoacido: %-6sID: %-6dX: %-10.3lfY: %-10.3lfZ: %-10.3lf\n", b->nome, b->amino, b->id, b->x, b->y, b->z);
               }
               printf("Arquivo gerado com sucesso!\n");
@@ -277,14 +279,14 @@ int main(int argc, char **argv){
                 if(ok){
                     if(l==1){
                         int size=0;
-                        char dados[100][6];
-                        int qtds[100];
+                        char dados[500][6];
+                        int qtds[500];
                         ATOM *li=inic;
 
                         do{
                             int eNovo=1;
+                            char const *str=ok==1? li->nome: li->amino;
                             for(i=0; i<size; i++){
-                                char const *str=ok==1? li->nome: li->amino;
                                 if(strcmp(dados[i],str)==0){
                                     qtds[i]++;
                                     eNovo=0;
@@ -302,7 +304,7 @@ int main(int argc, char **argv){
                         }while(li!=NULL);
 
                         char const *str2=ok==1? "nome": "aminoacido";
-                        for(i=0; i<size; i++){
+                        for(i=0; i<size-1; i++){
                             printf("Ha %d atomo%s com o %s %s\n",
                                 qtds[i],
                                 qtds[i]>1? "s": "",
@@ -334,34 +336,50 @@ int main(int argc, char **argv){
         }
 
         else if(strcmp(m[0], "total") == 0 && l == 0){
-            int tam = 0, tipos[100], totais[100], n;
-                char aminos[100][10];
-                ATOM *xis = inic;
-                do{
-                    int novato = 1, n;
-                    for(n = 0; n < tam; n++){
-                        if(strcmp(aminos[n], xis->amino) == 0 && tipos[n] == xis->tipo){
-                            novato = 0;
-                            totais[n]++;
-                            break;
-                        }
+            int tam = 0, tipos[500], difs[16], totais[500], n, j;
+            char aminos[500][6], atual[6], ant[6];
+            ATOM *xis = inic;
+            do{
+                int novato = 1, n;
+                for(n = 0; n < tam; n++){
+                    if(strcmp(aminos[n], xis->amino) == 0 && tipos[n] == xis->tipo){
+                        novato = 0;
+                        totais[n]++;
+                        break;
                     }
-                    if(novato){
-                        totais[tam] = 1;
-                        strcpy(aminos[tam], xis->amino);
-                        tipos[n] = xis->tipo;
-                        tam++;
-                    }
-                    xis = xis->prox;
+                }
+                if(novato){
+                    totais[tam] = 1;
+                    strcpy(aminos[tam], xis->amino);
+                    tipos[n] = xis->tipo;
+                    tam++;
+                }
+                xis = xis->prox;
             }while(xis);
-
-            for(n = 0; n < tam; n++){
-                    printf("Ha %d atomo%s com o aminiacido %s do tipo %d\n",
-                    totais[n],
-                    totais[n]>1?"s":"",
-                    aminos[n],
-                    tipos[n]);
+            
+            for (n = 0; n < tam; n++) {
+            	strcpy(atual, aminos[n]);
+            	if (strcmp(ant, atual)== 0) {
+            		difs[j]++;
+            	} else {
+            		j++;
+            	}
+            	strcpy(ant, atual);
             }
+
+			strcpy(ant, "");
+
+            for(n = 0, j = 0; n < tam; n++){
+            	strcpy(atual, aminos[n]);
+                
+                if (strcmp(ant, atual) != 0) {
+                printf("\nExistem %d tipos diferentes do aminoacido %s\n\n", difs[j+1]+1, aminos[n]);
+                j++;
+                }
+                strcpy(ant, atual);
+            }
+            
+           printf("\nHa no total %d aminoacidos diferentes\n", tam);
         }
 
         else if(strcmp(m[0], "encerrar") == 0){
@@ -376,7 +394,4 @@ int main(int argc, char **argv){
         printf("\n");
         if(furia>0) furia--;
     }
-
-    fclose(arq);
-    return 0;
 }
